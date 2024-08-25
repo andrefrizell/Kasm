@@ -184,6 +184,7 @@ multiImages:
     changeFiles:
       - dockerfile-kasm-telegram
       - src/ubuntu/install/telegram/**
+      - src/ubuntu/install/chrome/**
   - name: terminal
     singleapp: false
     base: core-ubuntu-focal
@@ -331,6 +332,7 @@ multiImages:
     changeFiles:
       - dockerfile-kasm-vs-code
       - src/ubuntu/install/vs_code/**
+      - src/ubuntu/install/chrome/**
   - name: almalinux-8-desktop
     singleapp: false
     base: core-almalinux-8
@@ -640,6 +642,35 @@ multiImages:
     dockerfile: dockerfile-kasm-ubuntu-jammy-dind-rootless
     changeFiles:
       - dockerfile-kasm-ubuntu-jammy-dind-rootless
+      - src/ubuntu/install/vs_code/**
+      - src/ubuntu/install/vs_code/**
+      - src/ubuntu/install/tools/**
+      - src/ubuntu/install/sublime_text/**
+      - src/ubuntu/install/misc/**
+      - src/ubuntu/install/dind_rootless/**
+      - src/ubuntu/install/cleanup/**
+      - src/ubuntu/install/chromium/**
+      - src/ubuntu/install/chrome/**
+  - name: ubuntu-noble-dind
+    singleapp: false
+    base: core-ubuntu-noble
+    dockerfile: dockerfile-kasm-ubuntu-noble-dind
+    changeFiles:
+      - dockerfile-kasm-ubuntu-noble-dind
+      - src/ubuntu/install/vs_code/**
+      - src/ubuntu/install/tools/**
+      - src/ubuntu/install/sublime_text/**
+      - src/ubuntu/install/misc/**
+      - src/ubuntu/install/dind/**
+      - src/ubuntu/install/cleanup/**
+      - src/ubuntu/install/chromium/**
+      - src/ubuntu/install/chrome/**
+  - name: ubuntu-noble-dind-rootless
+    singleapp: false
+    base: core-ubuntu-noble
+    dockerfile: dockerfile-kasm-ubuntu-noble-dind-rootless
+    changeFiles:
+      - dockerfile-kasm-ubuntu-noble-dind-rootless
       - src/ubuntu/install/vs_code/**
       - src/ubuntu/install/vs_code/**
       - src/ubuntu/install/tools/**
