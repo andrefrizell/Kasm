@@ -2,7 +2,7 @@
 set -ex
 
 if [ "$DISTRO" = centos ]; then
-  yum install -y nano zip wget
+  yum install -y nano zip wget seahorse gnome-keyring
   yum install epel-release -y
   yum install xdotool -y
 else
