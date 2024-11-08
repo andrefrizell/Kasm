@@ -15,6 +15,7 @@ The Kasm team publishes applications and desktop images for use inside the platf
 To build the provided images:
 
     sudo docker build -t kasmweb/firefox:dev -f dockerfile-kasm-firefox .
+    docker buildx build --platform linux/amd64 -f dockerfile-kasm-ubuntu-focal-desktop -t antlac1/ubuntu-focal-desktop  .
 
 
 While these image are primarily built to run inside the Workspaces platform, they can also be executed manually.  Please note that certain functionality, such as audio, uploads, downloads, and microphone pass-through are only available within the Kasm platform.
