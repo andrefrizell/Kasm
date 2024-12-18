@@ -48,7 +48,7 @@ elif [[ "${DISTRO}" == "fedora40" ]]; then
   cp /usr/share/applications/org.mozilla.thunderbird.desktop $HOME/Desktop/
   chmod +x $HOME/Desktop/org.mozilla.thunderbird.desktop
 else
-  cp /usr/share/applications/thunderbird.desktop $HOME/Desktop/
+  cp /usr/share/applications/thunderbird-esr.desktop $HOME/Desktop/
   chmod +x $HOME/Desktop/thunderbird.desktop
 fi
 
