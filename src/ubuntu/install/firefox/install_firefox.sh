@@ -32,23 +32,30 @@ Pin-Priority: 1001
   fi
   apt-get install -y firefox p11-kit-modules
 elif grep -q "ID=debian" /etc/os-release || grep -q "ID=kali" /etc/os-release || grep -q "ID=parrot" /etc/os-release; then
-  echo \
-    "deb http://deb.debian.org/debian/ unstable main contrib non-free" >> \
-    /etc/apt/sources.list
-cat > /etc/apt/preferences.d/99pin-unstable <<EOF
+  if [ "${ARCH}" == "amd64" ]; then
+    install -d -m 0755 /etc/apt/keyrings
+    wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- > /etc/apt/keyrings/packages.mozilla.org.asc
+    echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" > /etc/apt/sources.list.d/mozilla.list
+    echo '
 Package: *
-Pin: release a=stable
-Pin-Priority: 900
-
-Package: *
-Pin: release a=unstable
-Pin-Priority: 10
-EOF
-  apt-get update
-  # force non-interactive behaviour to avoid prompts 
-  export DEBIAN_FRONTEND=noninteractive
-  # use newest conf incase of conflicts with "--force-confnew"
-  apt-get install -o Dpkg::Options::="--force-confnew" -y -t unstable firefox p11-kit-modules
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+' > /etc/apt/preferences.d/mozilla
+    apt-get update
+    apt-get install -y firefox p11-kit-modules
+    cp \
+      /usr/share/applications/firefox.desktop \
+      $HOME/Desktop/
+    chmod +x $HOME/Desktop/firefox.desktop
+  else
+    apt-get update
+    apt-get install -y firefox-esr p11-kit-modules
+    rm -f $HOME/Desktop/firefox.desktop
+    cp \
+      /usr/share/applications/firefox-esr.desktop \
+      $HOME/Desktop/
+    chmod +x $HOME/Desktop/firefox-esr.desktop
+  fi
 else
   apt-mark unhold firefox || :
   apt-get remove firefox
@@ -106,8 +113,13 @@ fi
 
 if [[ "${DISTRO}" != @(centos|oracle8|rockylinux9|rockylinux8|oracle9|almalinux9|almalinux8|opensuse|fedora37|fedora38|fedora39) ]]; then
   # Update firefox to utilize the system certificate store instead of the one that ships with firefox
-  rm -f /usr/lib/firefox/libnssckbi.so
-  ln /usr/lib/$(arch)-linux-gnu/pkcs11/p11-kit-trust.so /usr/lib/firefox/libnssckbi.so
+  if (grep -q "ID=debian" /etc/os-release || grep -q "ID=kali" /etc/os-release || grep -q "ID=parrot" /etc/os-release) && [ "${ARCH}" == "arm64" ]; then
+    rm -f /usr/lib/firefox-esr/libnssckbi.so
+    ln /usr/lib/$(arch)-linux-gnu/pkcs11/p11-kit-trust.so /usr/lib/firefox-esr/libnssckbi.so
+  else
+    rm -f /usr/lib/firefox/libnssckbi.so
+    ln /usr/lib/$(arch)-linux-gnu/pkcs11/p11-kit-trust.so /usr/lib/firefox/libnssckbi.so
+  fi
 fi
 
 if [[ "${DISTRO}" == @(centos|oracle8|rockylinux9|rockylinux8|oracle9|almalinux9|almalinux8|fedora37|fedora38|fedora39) ]]; then
@@ -119,6 +131,8 @@ if [[ "${DISTRO}" == @(centos|oracle8|rockylinux9|rockylinux8|oracle9|almalinux9
   sed -i -e '/homepage/d' "$preferences_file"
 elif [ "${DISTRO}" == "opensuse" ]; then
   preferences_file=/usr/lib64/firefox/browser/defaults/preferences/firefox.js
+elif (grep -q "ID=debian" /etc/os-release || grep -q "ID=kali" /etc/os-release || grep -q "ID=parrot" /etc/os-release) && [ "${ARCH}" == "arm64" ]; then
+  preferences_file=/usr/lib/firefox-esr/browser/defaults/preferences/firefox.js
 else
   preferences_file=/usr/lib/firefox/browser/defaults/preferences/firefox.js
 fi
