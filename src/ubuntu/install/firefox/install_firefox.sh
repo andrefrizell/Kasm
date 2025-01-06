@@ -134,7 +134,7 @@ elif [ "${DISTRO}" == "opensuse" ]; then
 elif (grep -q "ID=debian" /etc/os-release || grep -q "ID=kali" /etc/os-release || grep -q "ID=parrot" /etc/os-release) && [ "${ARCH}" == "arm64" ]; then
   preferences_file=/usr/lib/firefox-esr/browser/defaults/preferences/firefox.js
 else
-  preferences_file=/usr/lib/firefox/browser/defaults/preferences/firefox.js
+  preferences_file=/usr/lib/firefox/defaults/pref/firefox.js
 fi
 
 # Disabling default first run URL for Debian based images
